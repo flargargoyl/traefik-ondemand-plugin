@@ -1,0 +1,6 @@
+    [http.middlewares.my-traefik-ondemand-plugin]
+      [http.middlewares.my-traefik-ondemand-plugin.plugin]
+        [http.middlewares.my-traefik-ondemand-plugin.plugin.traefik-ondemand-plugin]
+          name = "TRAEFIK_HACKATHON_whoami"
+          serviceUrl = "http://ondemand:10000"
+          timeout = "1m"
