@@ -11,8 +11,8 @@
       - traefik.http.middlewares.ondemand_whoami.plugin.traefik-ondemand-plugin.name=whoami
       - traefik.http.middlewares.ondemand_whoami.plugin.traefik-ondemand-plugin.serviceUrl=http://ondemand:10000
       - traefik.http.middlewares.ondemand_whoami.plugin.traefik-ondemand-plugin.timeout=1m
-	  
-  whoami:
+
+whoami:
     image: containous/whoami
     networks:
       - t2_proxy
