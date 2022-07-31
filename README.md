@@ -32,6 +32,7 @@ https://github.com/.../traef.../blob/main/docker-compose.yml
 2. Create your app's file. here's an example of whoemi.yml
 https://github.com/flargargoyl/traefik-ondemand-plugin/blob/main/ondemand-whoami.yml
 
+```
 http:
   routers:
     whoami:
@@ -40,11 +41,11 @@ http:
         - "https"
       middlewares:
         - ondemand_whoami@docker
-# Any other midlewares should work as well, as long as you have them in your middlewares or middlewares-chains files, apply as example below with your names:
-#        - chain-oauth 
-#        - middlewares-rate-limit
-#        - middlewares-secure-headers
-#        - middlewares-oauth
+     # Any other midlewares should work as well, as long as you have them in your middlewares or middlewares-chains files, apply as example below with your names:
+     #        - chain-oauth 
+     #        - middlewares-rate-limit
+     #        - middlewares-secure-headers
+     #        - middlewares-oauth
       service: "whoami"
       tls: {}
 
@@ -53,6 +54,7 @@ http:
       loadBalancer:
         servers:
         - url: "http://whoami:80"
+```
 
 
 Obviously replace your domainname and watch for the naming convention.
@@ -61,6 +63,7 @@ As you may see, it supports other middlewares and even chains of them!
 Now, in your docker-compose file:
 https://github.com/flargargoyl/traefik-ondemand-plugin/blob/main/docker-compose.yml
 
+```
   ondemand:
     image: ghcr.io/acouvreur/traefik-ondemand-service:1
     <<: *common-keys-core
@@ -71,7 +74,7 @@ https://github.com/flargargoyl/traefik-ondemand-plugin/blob/main/docker-compose.
       - '/var/run/docker.sock:/var/run/docker.sock' 
     labels:
       - traefik.enable=true
-      - traefik.http.middlewares.ondemand_whoami.plugin.traefik-ondemand-plugin.name=whoami
+      - traefik.http.middlewares.ondemand_whoami.plugin.traefik-ondemand-plugin.name=whoami #attention to ondemand_whoami - should be the same you use in the app file! 
       - traefik.http.middlewares.ondemand_whoami.plugin.traefik-ondemand-plugin.serviceUrl=http://ondemand:10000
       - traefik.http.middlewares.ondemand_whoami.plugin.traefik-ondemand-plugin.timeout=1m
 
@@ -87,7 +90,7 @@ whoami:
       PUID: $PUID
       PGID: $PGID
       TZ: $TZ
-
+```
 
 Make sure Traefik, Ondemand and the service you want to be ondemand are in the same docker network (and preferably the same file - i had some weird issues if a service was in a separate docker compose file :C )
 
