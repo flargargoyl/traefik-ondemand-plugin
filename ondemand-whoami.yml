@@ -1,0 +1,21 @@
+http:
+  routers:
+    whoami:
+      rule: HostHeader(`whoami.$DOMAINNAME`)
+      entryPoints:
+        - "https"
+      middlewares:
+        - ondemand_whoami@docker
+# Any other midlewares should work as well, as long as you have them in your middlewares or middlewares-chains files, apply as example below with your names:
+#        - chain-oauth 
+#        - middlewares-rate-limit
+#        - middlewares-secure-headers
+#        - middlewares-oauth
+      service: "whoami"
+      tls: {}
+
+  services:
+    whoami:
+      loadBalancer:
+        servers:
+        - url: "http://whoami:80"
