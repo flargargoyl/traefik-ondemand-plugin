@@ -1,0 +1,26 @@
+  ondemand:
+    image: ghcr.io/acouvreur/traefik-ondemand-service:1
+    <<: *common-keys-core
+    container_name: ondemand
+    command: 
+      - --swarmMode=false
+    volumes: #I have not yet checked how it works with Socket-proxy but i will and higly suggest you would rather use that than just mount your docker socket directly, for security reasons!
+      - '/var/run/docker.sock:/var/run/docker.sock' 
+    labels:
+      - traefik.enable=true
+      - traefik.http.middlewares.ondemand_whoami.plugin.traefik-ondemand-plugin.name=whoami
+      - traefik.http.middlewares.ondemand_whoami.plugin.traefik-ondemand-plugin.serviceUrl=http://ondemand:10000
+      - traefik.http.middlewares.ondemand_whoami.plugin.traefik-ondemand-plugin.timeout=1m
+	  
+  whoami:
+    image: containous/whoami
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped 
+    container_name: whoami
+    environment: #port 80
+      PUID: $PUID
+      PGID: $PGID
+      TZ: $TZ
